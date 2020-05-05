@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Image;
 use App\Album;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -26,7 +27,12 @@ class ImageController extends Controller
     public function album()
     {
         $albums = Album::with('images')->get();
-        return view('welcome', compact('albums'));
+        $total_img = 0;
+        foreach ($albums as $album)
+        {
+            $total_img += $album->images->count();
+        }
+        return view('welcome', compact('albums', 'total_img'));
     }
 
     /**
@@ -80,10 +86,15 @@ class ImageController extends Controller
     {
         $image_id = request('image_id');
         $album_id = request('album_id');
+        $image = Image::findOrFail($image_id);
         $album = Album::findOrFail($album_id);
-        $album_image_count = $album->images->count();
 
-        Image::findOrFail($image_id)->delete();
+        $album_image_count = $album->images->count();
+        $filename = $image->name;
+        $image->delete();
+        Storage::delete('public/'.$filename);
+
+
         if ($album_image_count >= 2)
         {
             return Redirect::back();
@@ -91,7 +102,7 @@ class ImageController extends Controller
         else
         {
             $album->delete();
-            return redirect()->route('album');
+            return redirect()->route('home');
         }
     }
 }
