@@ -50,7 +50,7 @@
 </div>
 @endsection
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+@section('js_block')
 <script>
     $(document).ready(function (e) {
         // Hide alert btn
@@ -105,4 +105,4 @@
     });
 
 </script>
-
+@endsection

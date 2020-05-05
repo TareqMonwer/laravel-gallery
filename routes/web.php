@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ImageController@album');
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/album', 'ImageController@index');
 
 Route::post('/album', 'ImageController@store')->name('album.store');
+
+Route::get('/albums/{id}', 'ImageController@show')->name('album.show');
