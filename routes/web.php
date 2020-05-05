@@ -19,8 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/album', 'ImageController@index');
+Route::get('/album', 'ImageController@index')->name('album');
 
 Route::post('/album', 'ImageController@store')->name('album.store');
 
 Route::get('/albums/{id}', 'ImageController@show')->name('album.show');
+
+Route::get('/album/image/delete', 'ImageController@destroy')->name('image.delete');

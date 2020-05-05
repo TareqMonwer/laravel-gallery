@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Image;
 use App\Album;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -69,8 +70,28 @@ class ImageController extends Controller
      * @param $id
      * @return Application|Factory|View
      */
-    public function show($id){
+    public function show($id)
+    {
         $album = Album::findOrFail($id);
         return view('gallery', compact('album'));
+    }
+
+    public function destroy()
+    {
+        $image_id = request('image_id');
+        $album_id = request('album_id');
+        $album = Album::findOrFail($album_id);
+        $album_image_count = $album->images->count();
+
+        Image::findOrFail($image_id)->delete();
+        if ($album_image_count >= 2)
+        {
+            return Redirect::back();
+        }
+        else
+        {
+            $album->delete();
+            return redirect()->route('album');
+        }
     }
 }
