@@ -23,6 +23,8 @@ Route::get('/album', 'ImageController@index')->name('album');
 
 Route::post('/album', 'ImageController@store')->name('album.store');
 
+Route::post('/album/add-more', 'ImageController@addMore')->name('album.add-more');
+
 Route::get('/albums/{id}', 'ImageController@show')->name('album.show');
 
 Route::get('/album/image/delete', 'ImageController@destroy')->name('image.delete');

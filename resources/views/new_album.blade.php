@@ -4,7 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-
             <div class="card p-2">
                 <div class="card-body">
                     {{-- Success Alert --}}
@@ -44,7 +43,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -59,7 +57,6 @@
         $(".btn-add-more").click(function () {
             // copy the html inside copy div.
             const html = $(".copy").html();
-            console.log(html);
             $(".init-add-more").after(html)
         });
 

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
 use App\Image;
 use App\Album;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -20,7 +21,7 @@ class ImageController extends Controller
     public function index()
     {
         $images = Image::get();
-        return view('home', compact('images'));
+        return view('new_album', compact('images'));
     }
 
 
@@ -32,7 +33,7 @@ class ImageController extends Controller
         {
             $total_img += $album->images->count();
         }
-        return view('welcome', compact('albums', 'total_img'));
+        return view('albums', compact('albums', 'total_img'));
     }
 
     /**
@@ -72,6 +73,29 @@ class ImageController extends Controller
 
 
     /***
+     * Add more image in album gallery.
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function addMore(Request $request)
+    {
+        $album_id = request('album_id');
+        if($request->hasFile('image'))
+        {
+            foreach ($request->file('image') as $image)
+            {
+                $path = $image->store('uploads', 'public');
+                Image::create([
+                    'name'=> $path,
+                    'album_id'=> $album_id
+                ]);
+            }
+        }
+        return redirect()->back();
+    }
+
+
+    /***
      *  Show album images
      * @param $id
      * @return Application|Factory|View
@@ -82,6 +106,9 @@ class ImageController extends Controller
         return view('gallery', compact('album'));
     }
 
+    /***
+    * Delete Image Inside Album
+     */
     public function destroy()
     {
         $image_id = request('image_id');
